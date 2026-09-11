@@ -12,6 +12,20 @@ app.get("/timestamp", (_, res) => {
     });
 });
 
+app.get('/health', (_, res) => {
+    res.json({
+        status: "ok"
+    });
+});
+
+app.get('/stats', (_, res) => {
+    res.json({
+        uptime: Math.floor(process.uptime()),
+        nodeVersion: process.version,
+        timestamp: moment().toISOString()
+    });
+});
+
 app.listen(PORT, HOST, () => {
     console.log(`listening on http://${HOST}:${PORT}`);
 });
