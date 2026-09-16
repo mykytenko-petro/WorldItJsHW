@@ -6,38 +6,28 @@ const PORT = 8000;
 
 const app = express();
 
-const products = [
-    {
-        id: 1,
-        name: "product 1",
-        price: 2232,
-        category: "some category"
-    },
-    {
-        id: 2,
-        name: "product 2",
-        price: 2232,
-        category: "some category"
-    },
-    {
-        id: 3,
-        name: "product 3",
-        price: 2232,
-        category: "some category"
-    },
-    {
-        id: 4,
-        name: "product 4",
-        price: 2232,
-        category: "some category"
-    },
-    {
-        id: 5,
-        name: "product 5",
-        price: 2232,
-        category: "some category"
-    },
-]
+app.use(express.json());
+
+const products = []
+
+function addProduct(name, price, category, image, fail) {
+    return new Promise((resolve, reject) => {
+        if (fail === "true") {
+            return reject();
+        }
+
+        products.push({
+            name: name,
+            price: price,
+            category: category,
+            image: image ? image : ""
+        });
+
+        console.log(products);
+
+        resolve();
+    });
+}
 
 app.get("/timestamp", (_, res) => {
     res.json({
@@ -94,6 +84,40 @@ app.get('/products/:id', (req, res) => {
     }
 
     res.status(200).json(product);
+});
+
+app.post('/products', (req, res) => {
+    const { fail } = req.query;
+    const { name, price, category, image } = req.body;
+
+    if (!name || typeof name !== 'string' || name.trim() === '') {
+        return res.status(422).json({ message: 'Invalid product data' });
+    }
+
+    const numericPrice = Number(price);
+    if (price === undefined || isNaN(numericPrice) || numericPrice < 0) {
+        return res.status(422).json({ message: 'Invalid product data' });
+    }
+
+    if (!category || typeof category !== 'string' || category.trim() === '') {
+        return res.status(422).json({ message: 'Invalid product data' });
+    }
+
+    const duplicate = products.find(
+        p => p.name.toLowerCase() === name.toLowerCase()
+    );
+
+    if (duplicate) {
+        return res.status(409).json({ message: 'Conflict' });
+    }
+
+    addProduct(name.trim(), numericPrice, category.trim(), image, fail)
+        .then(() => {
+            res.status(201).json({ message: 'Created' });
+        })
+        .catch(() => {
+            res.status(500).json({ message: 'Internal server error' });
+        });
 });
 
 app.listen(PORT, HOST, () => {
