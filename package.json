@@ -2,14 +2,16 @@
   "name": "dz-05.09.2026",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
-  "main": "index.js",
+  "type": "module",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "tsup src/app.ts --format esm --clean && node dist/app.js"
   },
   "dependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^26.6.2",
     "express": "^5.2.1",
-    "moment": "^2.30.1"
+    "tsup": "^8.5.1",
+    "typescript": "^7.0.2"
   }
 }
