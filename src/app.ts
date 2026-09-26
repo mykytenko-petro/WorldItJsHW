@@ -12,5 +12,3 @@ app.use("/", postRouter);
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`)
 });
-
-// TODO: remake from tsup to ts-node
