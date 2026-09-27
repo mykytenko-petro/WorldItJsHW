@@ -5,13 +5,13 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "tsup src/app.ts --format esm --clean && node dist/app.js"
+    "start": "tsx src/app.ts"
   },
   "dependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.2",
     "express": "^5.2.1",
-    "tsup": "^8.5.1",
+    "tsx": "^4.23.15",
     "typescript": "^7.0.2"
   }
 }
