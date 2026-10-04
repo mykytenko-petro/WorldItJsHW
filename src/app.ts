@@ -3,6 +3,7 @@ import { createPostRepository } from "./repositories/post";
 import { createPostService } from "./services/post/post";
 import { createPostHandler } from "./transport/handlers/post/post";
 import { createPostRouter } from "./routers/post/post";
+import { db } from "./prisma/db";
 
 const PORT = 8000;
 const HOST = "localhost";
@@ -10,7 +11,7 @@ const HOST = "localhost";
 const app = express();
 
 // composition root
-const postRepository = createPostRepository();
+const postRepository = createPostRepository(db);
 const postService = createPostService(postRepository);
 const postHandler = createPostHandler(postService);
 const postRouter = createPostRouter(postHandler);
