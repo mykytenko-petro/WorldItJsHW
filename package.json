@@ -5,13 +5,20 @@
   "type": "module",
   "main": "app.js",
   "scripts": {
-    "start": "tsx src/app.ts"
+    "start": "npx tsc --noEmit && npx tsx src/app.ts",
+    "dev": "tsx watch src/app.ts"
   },
   "dependencies": {
+    "@prisma/orm-postgres": "8.0.0-rc.11",
     "@types/express": "^5.0.6",
     "@types/node": "^26.6.2",
+    "dotenv": "^18.0.5",
     "express": "^5.2.1",
     "tsx": "^4.23.15",
     "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "@prisma/cli-engine": "^0.6.2",
+    "prisma": "8.0.0-rc.15"
   }
 }

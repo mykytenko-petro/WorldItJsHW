@@ -3,7 +3,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "module": "esnext",
+    "module": "preserve",
     "target": "esnext",
     "types": [
       "node",
@@ -13,6 +13,7 @@
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "noEmitOnError": true,
 
     // Style Options
     "noImplicitReturns": true,
@@ -30,5 +31,9 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
-  }
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "*.config.ts"]
 }

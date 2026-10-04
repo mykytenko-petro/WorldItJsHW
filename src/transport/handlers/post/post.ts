@@ -7,7 +7,7 @@ import type { PostHandlerContract } from "./post.types";
 
 export function createPostHandler(service: PostServiceContract): PostHandlerContract {
     return {
-        getAllPosts(
+        async getAllPosts(
             req: Request<unknown, unknown, unknown, GetPostsQuery>,
             res: Response<PostResponse[] | ValidationErrorResponse>
         ) {
@@ -33,12 +33,12 @@ export function createPostHandler(service: PostServiceContract): PostHandlerCont
                 parsedTake = num;
             }
 
-            const result = service.getAllPosts(parsedCategory, parsedTake);
+            const result = await service.getAllPosts(parsedCategory, parsedTake);
 
             return res.status(200).json(result);
         },
 
-        getPostById(
+        async getPostById(
             req: Request<GetPostByIdParams>,
             res: Response<PostResponse | ValidationErrorResponse | NotFoundErrorResponse>
         ) {
@@ -49,7 +49,7 @@ export function createPostHandler(service: PostServiceContract): PostHandlerCont
                 return res.status(422).json({ error: "Route parameter 'id' must be a positive integer." });
             }
 
-            const result = service.getPostById(parsedId);
+            const result = await service.getPostById(parsedId);
             if (!result) {
                 return res.status(404).json({ error: `Post with ID ${parsedId} not found.` });
             }
@@ -83,7 +83,7 @@ export function createPostHandler(service: PostServiceContract): PostHandlerCont
                 body.category.trim()
             );
 
-            return res.status(201).json(result);
+            return res.status(201).json(result as PostResponse);
         }
     }
 }

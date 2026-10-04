@@ -1,39 +1,42 @@
-import type { PostEntity } from "../domain/post/entity";
 import type { PostRepositoryContract } from "../domain/post/repository";
+import type { Database } from "./types";
 
-const posts: PostEntity[] = [];
-
-export function createPostRepository(): PostRepositoryContract {
+export function createPostRepository(db: Database): PostRepositoryContract {
     return {
-        getAll(category?: string, take?: number) {
-            return posts
-                .filter(p => !category || p.category === category)
-                .slice(0, take);
+        async getAll(category?: string, take?: number) {
+            if (category) {
+                return await db.orm.public.Post.where({category: category}).all();
+            }
+
+            if (take) {
+                return await db.orm.public.Post.limit(take).all();
+            }
+
+            if (category && take) {
+                return await db.orm.public.Post.where({category: category}).limit(take).all();
+            }
+
+            console.log(2232)
+
+            return await db.orm.public.Post.all();
         },
 
-        getById(id: number) {
-            return posts.find(p => p.id === id);
+        async getById(id: number) {
+            return await db.orm.public.Post.where({id: id}).first()
         },
 
-        addPost(
+        async addPost(
             title: string,
             content: string,
             author: string,
             category: string
-        ): Promise<PostEntity> {
-            return new Promise((resolve) => {
-                const post: PostEntity = {
-                    id: posts.length + 1,
-                    title: title,
-                    content: content,
-                    author: author,
-                    category: category
-                }
-
-                posts.push(post);
-
-                resolve(post);
-            });
+        ) {
+            return await db.orm.public.Post.create({
+                title: title,
+                content: content,
+                author: author,
+                category: category
+            })
         }
     };
 }
